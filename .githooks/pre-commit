@@ -1,0 +1,8 @@
+PYFILES=$(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g' | grep "\.py")
+
+if [ -n "$PYFILES" ]; then
+    echo "$PYFILES" | xargs isort --profile black || exit 1
+    echo "$PYFILES" | xargs black || exit 1
+    echo "$PYFILES" | xargs mypy || exit 1
+    echo "$PYFILES" | xargs git add || exit 1
+fi
